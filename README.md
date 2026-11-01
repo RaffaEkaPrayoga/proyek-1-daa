@@ -1,83 +1,155 @@
-# 2026 PROYEK 1 DAA 3A
+# E. Deduplikasi Log Server & Anomali Siber
 
-## E. Deduplikasi Log Server & Anomali Siber
+## Deskripsi Proyek
 
-### 1. Identitas Proyek
+Program ini merupakan implementasi algoritma pencarian string dan pengurutan untuk mendeteksi pola anomali pada file log server.
 
-Proyek ini merupakan bagian dari tugas **Proyek 1 mata kuliah Desain dan Analisis Algoritma (DAA) kelas 3A tahun 2026**.
+Program membaca file log, mencari pola anomali yang dimasukkan pengguna, mencatat nomor baris tempat pola ditemukan, menghitung frekuensi berdasarkan jumlah baris yang mengandung pola, kemudian mengurutkan hasil dari frekuensi paling sedikit hingga paling banyak.
 
-Pada proyek ini, kami memilih **Studi Kasus E: Deduplikasi Log Server & Anomali Siber** sebagai topik yang akan dianalisis dan diimplementasikan.
+## Fitur
 
-### 2. Deskripsi Proyek
+- Membaca data log dari file `server.log`.
+- Mencari pola anomali menggunakan algoritma Knuth-Morris-Pratt (KMP).
+- Mencatat nomor baris tempat pola ditemukan.
+- Menghitung frekuensi setiap pola.
+- Mengurutkan hasil menggunakan Merge Sort.
+- Menampilkan jumlah perbandingan karakter pencarian KMP.
+- Membandingkan pendekatan iteratif dan rekursif untuk perhitungan total frekuensi.
 
-Server menghasilkan banyak baris log aktivitas setiap detiknya. Sebagian besar log merupakan aktivitas normal, sedangkan sebagian lainnya mengandung indikasi serangan siber, seperti SQL Injection dan Buffer Overflow.
+## Algoritma yang Digunakan
 
-Permasalahan yang diangkat dalam proyek ini adalah bagaimana memindai kumpulan log server untuk menemukan baris yang mengandung pola anomali tertentu, mencatat nomor baris tempat pola ditemukan, menghitung frekuensi kemunculannya, serta mengurutkan hasil berdasarkan tingkat kelangkaan serangan.
+### Algoritma utama
 
-Program akan mengolah file log dan pola anomali yang diberikan sebagai input, kemudian menghasilkan laporan deteksi anomali yang terurut dari frekuensi paling sedikit hingga paling banyak.
+| Algoritma | Fungsi |
+|---|---|
+| KMP | Mencari pola anomali dalam setiap baris log |
+| Merge Sort | Mengurutkan hasil berdasarkan frekuensi terkecil |
 
-### 3. Tujuan Proyek
-
-Tujuan dari proyek ini adalah:
-
-- Mengidentifikasi baris log yang mengandung pola anomali atau signature serangan siber.
-- Menampilkan nomor baris tempat setiap pola anomali ditemukan.
-- Menghitung frekuensi kemunculan setiap pola berdasarkan jumlah baris yang mengandung pola tersebut.
-- Mengurutkan hasil deteksi dari frekuensi terkecil hingga terbesar.
-- Menganalisis dan membandingkan kompleksitas algoritma berdasarkan teori dan hasil eksperimen.
-
-### 4. Algoritma yang Digunakan
-
-Dalam menyelesaikan permasalahan ini, algoritma yang dipilih adalah:
+### Algoritma pembanding
 
 | Algoritma | Kegunaan |
 |---|---|
-| KMP (Knuth-Morris-Pratt) | Mencari pola anomali di dalam setiap baris log secara efisien menggunakan tabel LPS (*Longest Prefix Suffix*). |
-| Merge Sort | Mengurutkan hasil deteksi berdasarkan frekuensi kemunculan, dari yang paling sedikit hingga paling banyak. |
-| Naive String Matching | Digunakan sebagai algoritma pembanding untuk mengevaluasi kinerja pencarian pola. |
+| Linear Search | Pembanding pencarian substring secara naif |
+| Binary Search | Pembanding pencarian kecocokan seluruh isi baris |
+| Boyer-Moore | Pembanding pencocokan string menggunakan bad-character heuristic |
+| Bubble Sort | Pembanding algoritma pengurutan |
+| Selection Sort | Pembanding algoritma pengurutan |
+| Insertion Sort | Pembanding algoritma pengurutan |
 
-### 5. Gambaran Alur Program
+## Struktur Proyek
 
-Secara umum, program akan menjalankan tahapan berikut:
+```text
+proyek-1-daa/
+├── data/
+│   └── server.log
+├── img/
+├── src/
+│   └── log_analyzer/
+│       ├── __init__.py
+│       ├── models.py
+│       ├── log_reader.py
+│       ├── searching.py
+│       ├── string_matching.py
+│       ├── sorting.py
+│       ├── analyzer.py
+│       ├── benchmark.py
+│       ├── benchmark_sorting.py
+│       ├── benchmark_comparison.py
+│       └── main.py
+├── test/
+│   ├── test_string_matching.py
+│   ├── test_sorting.py
+│   └── test_analyzer.py
+├── pyproject.toml
+└── README.md
+```
 
-1. Menerima lokasi file log dan pola anomali yang ingin dicari.
-2. Membaca file log serta menyimpan setiap baris beserta nomor barisnya.
-3. Membangun tabel LPS untuk setiap pola menggunakan algoritma KMP.
-4. Melakukan pencarian pola terhadap seluruh baris log.
-5. Mengumpulkan nomor baris yang mengandung pola dan menghitung frekuensinya.
-6. Mengelompokkan hasil pencarian berdasarkan pola anomali.
-7. Mengurutkan hasil menggunakan Merge Sort berdasarkan frekuensi terkecil hingga terbesar.
-8. Menampilkan laporan hasil deteksi beserta metrik perbandingan karakter.
+## Persyaratan
 
-### 6. Ketentuan Implementasi
+- Python 3.12 atau lebih baru.
+- Pytest untuk menjalankan unit test.
 
-Implementasi proyek mengikuti ketentuan studi kasus, yaitu:
+## Cara Menjalankan Program
 
-- Input menggunakan karakter ASCII yang dapat dicetak (*printable characters*).
-- Karakter newline (`\n`) digunakan sebagai pemisah antarbaris log.
-- Program mengembalikan nomor baris yang mengandung pola anomali beserta frekuensinya.
-- Menggunakan KMP sebagai algoritma pencocokan pola.
-- Menggunakan Merge Sort untuk pengurutan hasil deteksi.
-- Tidak menggunakan operator/fungsi `in` untuk pencarian pola, `str.find()`, maupun `collections.Counter` bawaan Python.
+Jalankan perintah berikut dari direktori utama proyek:
 
-### 7. Analisis dan Pengujian
+```powershell
+py -m log_analyzer.main
+```
 
-Proyek ini juga mencakup analisis terhadap algoritma yang digunakan, meliputi:
+Program akan membaca file `data/server.log`, kemudian meminta pengguna memasukkan jumlah pola anomali dan pola yang ingin dicari.
 
-- Analisis kompleksitas waktu dan ruang.
-- Pembuktian *correctness* dan *termination*.
-- Pengujian menggunakan beberapa ukuran data.
-- Simulasi skenario terbaik dan terburuk.
-- Pengukuran waktu eksekusi dan penggunaan memori.
-- Analisis *time-space trade-off* berdasarkan hasil pengujian.
+## Menjalankan Pengujian
 
-### 8. Hasil yang Diharapkan
+Untuk menjalankan seluruh unit test:
 
-Program diharapkan dapat menghasilkan laporan anomali server yang berisi pola serangan, nomor baris pertama tempat pola ditemukan, dan frekuensi kemunculannya.
+```powershell
+py -m pytest -v
+```
 
-Hasil laporan diurutkan mulai dari pola dengan frekuensi paling rendah hingga paling tinggi sehingga pola anomali yang lebih jarang dapat lebih mudah diidentifikasi.
+## Menjalankan Benchmark
 
----
+### 1. Benchmark KMP
 
-**Proyek 1 - Desain dan Analisis Algoritma (DAA) 3A**  
-**Tahun Akademik 2026**
+```powershell
+py -m log_analyzer.benchmark
+```
+
+Pengujian dilakukan dengan variasi ukuran input dan kondisi pencarian terbaik serta terburuk yang disimulasikan.
+
+### 2. Benchmark Merge Sort
+
+```powershell
+py -m log_analyzer.benchmark_sorting
+```
+
+Pengujian dilakukan pada data terurut, acak, dan terurut terbalik dengan ukuran 100, 1.000, dan 10.000 elemen.
+
+### 3. Perbandingan Algoritma Sorting
+
+```powershell
+py -m log_analyzer.benchmark_comparison
+```
+
+Membandingkan Bubble Sort, Selection Sort, Insertion Sort, dan Merge Sort pada beberapa ukuran input.
+
+## Kompleksitas Algoritma Utama
+
+| Algoritma | Kompleksitas Waktu | Kompleksitas Ruang |
+|---|---|---|
+| KMP | O(N + m) per pola | O(m) |
+| Merge Sort | O(k log k) | O(k) |
+
+Keterangan:
+
+- N adalah total karakter log.
+- m adalah panjang pola.
+- k adalah jumlah pola anomali.
+
+Untuk seluruh proses pencarian terhadap k pola, kompleksitas waktunya adalah O(kN + P), dengan P sebagai total panjang seluruh pola.
+
+## Ketentuan Implementasi
+
+- Tidak menggunakan operator `in` untuk pencarian pola.
+- Tidak menggunakan `str.find()` untuk pencarian pola.
+- Tidak menggunakan `collections.Counter`.
+- Pencarian pola utama dilakukan menggunakan implementasi KMP.
+- Pengurutan laporan utama dilakukan menggunakan implementasi Merge Sort.
+
+## Hasil yang Diharapkan
+
+Program menghasilkan laporan yang berisi:
+
+1. Pola anomali yang dicari.
+2. Nomor baris pertama tempat pola ditemukan.
+3. Frekuensi berdasarkan jumlah baris yang mengandung pola.
+4. Hasil yang telah diurutkan dari frekuensi paling sedikit hingga paling banyak.
+5. Metrik perbandingan karakter KMP.
+
+## Pengembang
+
+Proyek ini dibuat untuk memenuhi tugas Proyek 1 mata kuliah Desain dan Analisis Algoritma (DAA).
+
+**Topik:** E. Deduplikasi Log Server & Anomali Siber
+
+**Repository:** [Tambahkan tautan GitHub repository]
