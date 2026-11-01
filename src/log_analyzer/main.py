@@ -1,3 +1,4 @@
+from pathlib import Path
 from .log_reader import LogReader
 from .analyzer import (
     LogAnalyzer,
@@ -7,21 +8,35 @@ from .analyzer import (
 
 
 def get_patterns():
-
     print("\n=== INPUT POLA ANOMALI ===")
 
-    k = int(input("Masukkan jumlah pola (k): "))
+    while True:
+        try:
+            k = int(input("Masukkan jumlah pola (k): "))
+
+            if k <= 0:
+                print("Jumlah pola harus lebih dari 0!")
+                continue
+
+            break
+
+        except ValueError:
+            print("Input harus berupa angka!")
 
     patterns = []
 
     for i in range(k):
-        pattern = input(f'Masukkan pola ke-{i + 1}: ').strip()
+        while True:
+            pattern = input(
+                f"Masukkan pola ke-{i + 1}: "
+            ).strip()
 
-        if not pattern:
-            print("Pola tidak boleh kosong!")
-            return get_patterns()
+            if not pattern:
+                print("Pola tidak boleh kosong!")
+                continue
 
-        patterns.append(pattern)
+            patterns.append(pattern)
+            break
 
     return patterns
 
@@ -30,7 +45,8 @@ def main():
 
     print("=== SERVER LOG ANOMALY DETECTION ===")
 
-    file_path = "data/server.log"
+    project_root = Path(__file__).resolve().parents[2]
+    file_path = project_root / "data" / "server.log"
 
     # 1. Membaca dataset log
     reader = LogReader()
@@ -64,7 +80,7 @@ def main():
         )
 
         print(f'\n{index}. Pola: "{result.pattern}"')
-        print(f"   Indeks Pertama: {first_line}")
+        print(f"   Nomor Baris Pertama: {first_line}")
         print(f"   Frekuensi: {result.frequency}")
 
     # 5. Menampilkan metrik
