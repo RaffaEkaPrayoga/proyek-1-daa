@@ -2,14 +2,14 @@ import time
 from .string_matching import KMP
 
 
-def benchmark_search(kmp, text, pattern, repetitions=10):
+def benchmark_search(kmp, text, pattern, lps, repetitions=10):
     total_time = 0
     total_comparisons = 0
 
     for _ in range(repetitions):
         start = time.perf_counter()
 
-        _, comparisons = kmp.search(text, pattern)
+        _, comparisons = kmp.search(text, pattern, lps)
 
         end = time.perf_counter()
 
@@ -23,44 +23,48 @@ def benchmark_search(kmp, text, pattern, repetitions=10):
 
 
 def run_benchmark():
-
     kmp = KMP()
 
     sizes = [100, 1000, 10000]
 
-    pattern = "POST /healthcheck"
+    # Pola dengan prefiks berulang
+    pattern = "A" * 16 + "B"
+
+    # Membuat LPS satu kali seperti pada LogAnalyzer
+    lps = kmp.build_lps(pattern)
 
     print("\n=== SIMULASI DAN PENGUJIAN KMP ===")
 
     for size in sizes:
 
-        # Membuat data log simulasi
-        best_text = "POST /healthcheck\n" * size
+        # Worst Case: banyak prefiks cocok, tetapi pola tidak ditemukan
+        worst_block = "A" * 16 + "C"
+        worst_text = worst_block * size
 
-        worst_text = "GET /index.html\n" * size
+        # Best Case: pola langsung ditemukan di awal teks
+        best_text = pattern + "C" * (
+            len(worst_text) - len(pattern)
+        )
 
-        # Menggabungkan seluruh baris menjadi satu teks
-        best_text = best_text.replace("\n", "")
-        worst_text = worst_text.replace("\n", "")
-
-        # Pengujian pola ditemukan
         best_time, best_comparisons = benchmark_search(
-            kmp, best_text, pattern
+            kmp, best_text, pattern, lps
         )
 
-        # Pengujian pola tidak ditemukan
         worst_time, worst_comparisons = benchmark_search(
-            kmp, worst_text, pattern
+            kmp, worst_text, pattern, lps
         )
 
-        print(f"\nUkuran data: {size} baris")
+        print(f"\nUkuran data: {size} blok")
+        print(f"Panjang teks: {len(worst_text)} karakter")
+
         print(
-            f"Terbaik  - Waktu: {best_time:.8f} detik | "
-            f"Perbandingan: {best_comparisons}"
+            f"Best Case  - Waktu: {best_time:.8f} detik | "
+            f"Perbandingan: {best_comparisons:.0f}"
         )
+
         print(
-            f"Terburuk - Waktu: {worst_time:.8f} detik | "
-            f"Perbandingan: {worst_comparisons}"
+            f"Worst Case - Waktu: {worst_time:.8f} detik | "
+            f"Perbandingan: {worst_comparisons:.0f}"
         )
 
 
