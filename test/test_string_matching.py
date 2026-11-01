@@ -24,6 +24,17 @@ def test_pattern_not_found():
     assert found is False
     assert comparisons > 0
 
+def test_kmp_multiple_occurrences_in_one_line():
+    kmp = KMP()
+
+    found, comparisons = kmp.search(
+        "POST /healthcheck POST /healthcheck POST /healthcheck",
+        "POST /healthcheck"
+    )
+
+    assert found is True
+    assert comparisons > 0
+
 def test_boyer_moore_pattern_found():
     bm = BoyerMoore()
 
@@ -81,3 +92,14 @@ def test_empty_pattern():
 
     assert found is False
     assert comparisons == 0
+
+def test_boyer_moore_multiple_occurrences_in_one_line():
+    bm = BoyerMoore()
+
+    found, comparisons = bm.search(
+        "POST /healthcheck POST /healthcheck POST /healthcheck",
+        "POST /healthcheck"
+    )
+
+    assert found is True
+    assert comparisons > 0

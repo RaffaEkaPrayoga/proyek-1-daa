@@ -78,3 +78,40 @@ def test_binary_search_empty_pattern():
 
     assert results == []
     assert comparisons == 0
+
+def test_binary_search_many_duplicate_logs():
+    logs = [
+        LogEntry(5, "GET /admin"),
+        LogEntry(2, "POST /login"),
+        LogEntry(8, "POST /login"),
+        LogEntry(1, "POST /login"),
+        LogEntry(9, "POST /logout"),
+        LogEntry(4, "POST /login"),
+    ]
+
+    # Binary Search membutuhkan data terurut berdasarkan content.
+    logs.sort(key=lambda log: log.content)
+
+    search = BinarySearch()
+    results, comparisons = search.search(logs, "POST /login")
+
+    assert results == [1, 2, 4, 8]
+    assert comparisons > 0
+
+
+def test_linear_search_multiple_occurrences_in_one_line():
+    logs = [
+        LogEntry(
+            7,
+            "POST /healthcheck POST /healthcheck POST /healthcheck"
+        )
+    ]
+
+    search = LinearSearch()
+    results, comparisons = search.search(
+        logs,
+        "POST /healthcheck"
+    )
+
+    assert results == [7]
+    assert comparisons > 0
