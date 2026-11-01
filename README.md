@@ -152,4 +152,4 @@ Proyek ini dibuat untuk memenuhi tugas Proyek 1 mata kuliah Desain dan Analisis 
 
 **Topik:** E. Deduplikasi Log Server & Anomali Siber
 
-**Repository:** [Tambahkan tautan GitHub repository]
+**Repository:** https://github.com/RaffaEkaPrayoga/proyek-1-daa
